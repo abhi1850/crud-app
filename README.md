@@ -51,9 +51,9 @@ This is a full-stack CRUD (Create, Read, Update, Delete) application developed t
     qualification VARCHAR(255) NOT NULL,
     occupation VARCHAR(255) NOT NULL,
     website VARCHAR(255) NOT NULL
-```
-
 );
+
+```
 
 ---
 
