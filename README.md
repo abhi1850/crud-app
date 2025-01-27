@@ -38,6 +38,23 @@ This is a full-stack CRUD (Create, Read, Update, Delete) application developed t
 - **Material-UI** (MUI) for styling)
 - **Axios** (for API communication)
 
+### Table info (Query) :
+
+```
+    CREATE TABLE personal_information (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    dob DATE NOT NULL,
+    phoneNumber VARCHAR(15) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    address TEXT NOT NULL,
+    qualification VARCHAR(255) NOT NULL,
+    occupation VARCHAR(255) NOT NULL,
+    website VARCHAR(255) NOT NULL
+```
+
+);
+
 ---
 
 ## Installation
