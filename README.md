@@ -55,6 +55,30 @@ This is a full-stack CRUD (Create, Read, Update, Delete) application developed t
 
 ```
 
+### Folder Structure :
+
+```
+backend
+|-server.js
+|-auth
+    |-auth.js
+
+frontend
+|-src
+   |-components
+     |-Footer.jsx
+     |-Header.jsx
+     |-Sidebar.jsx
+   |-pages
+     |-Form.jsx
+     |-View.jsx
+   |-auth
+     |-Login.jsx
+   |-store
+     |-App.js
+
+```
+
 ---
 
 ## Installation
