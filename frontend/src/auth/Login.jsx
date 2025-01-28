@@ -71,7 +71,7 @@ const Login = () => {
       try {
         const response = await signIn(values.username, values.password);
         toast.success(response.message); // Show success message
-        localStorage.setItem('authToken', response.token); // Store the token
+        sessionStorage.setItem('isAuthenticated', true);
         navigate('/form'); // Redirect to /form page
       } catch (error) {
         toast.error(error.message || 'Login failed'); // Show error message
