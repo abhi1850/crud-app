@@ -18,8 +18,9 @@ import { signIn } from '../store/auth';
 import LOGO from '/LOGO.png';
 
 const Login = () => {
-  const [captcha, setCaptcha] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [captcha, setCaptcha] = useState('');
+  const [captchaInput, setCaptchaInput] = useState('');
   const navigate = useNavigate();
 
   // Generate a random CAPTCHA
@@ -30,13 +31,14 @@ const Login = () => {
     for (let i = 0; i < 6; i++) {
       captcha += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    setCaptcha(captcha);
+    setCaptcha(captcha); // Store CAPTCHA value in state
+    setCaptchaInput(''); // Clear the CAPTCHA input field
   };
 
   // Initialize CAPTCHA on component mount
   useEffect(() => {
     generateCaptcha();
-  }, []); // This will run only once on component mount
+  }, []);
 
   // Formik for form validation
   const formik = useFormik({
@@ -72,10 +74,17 @@ const Login = () => {
         navigate('/form'); // Redirect to /form page
       } catch (error) {
         toast.error(error.message || 'Login failed'); // Show error message
-        generateCaptcha(); // Regenerate CAPTCHA on failure
+        generateCaptcha(); // Refresh CAPTCHA on error
       }
     },
   });
+
+  // Trigger Formik validation after CAPTCHA is refreshed
+  const handleCaptchaRefresh = () => {
+    generateCaptcha();
+    formik.setFieldValue('captchaInput', ''); // Clear the CAPTCHA input
+    formik.validateField('captchaInput'); // Trigger validation for CAPTCHA field
+  };
 
   return (
     <Grid container style={{ height: '100vh' }}>
@@ -189,15 +198,10 @@ const Login = () => {
                     color: 'gray',
                   }}
                 >
-                  <b>
-                    {captcha
-                      .split('')
-                      .sort(() => 0.5 - Math.random())
-                      .join('')}
-                  </b>
+                  <b>{captcha}</b>
                 </Typography>
 
-                <IconButton onClick={generateCaptcha}>
+                <IconButton onClick={handleCaptchaRefresh}>
                   <Refresh />
                 </IconButton>
               </Box>
