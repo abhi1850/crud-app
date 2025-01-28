@@ -1,6 +1,5 @@
 import express from 'express';
 import mysql from 'mysql';
-import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
@@ -25,35 +24,29 @@ router.post('/login', (req, res) => {
   const sql = 'SELECT * FROM users WHERE username = ?';
   db.query(sql, [username], (err, result) => {
     if (err) {
+      console.error('Error while querying the database:', err);
       return res
         .status(500)
         .json({ Message: 'Error inside server', Error: err });
     }
 
     if (result.length === 0) {
+      console.error(`No user found with username: ${username}`);
       return res.status(401).json({ Message: 'Invalid Username or Password' });
     }
 
     const user = result[0];
 
-    // Compare the password with the hashed password stored in the database
-    bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ Message: 'Error inside server', Error: err });
-      }
+    // Compare the plain-text password with the stored password
+    if (password !== user.password) {
+      console.error('Password mismatch for user:', username);
+      return res.status(401).json({ Message: 'Invalid Username or Password' });
+    }
 
-      if (!isMatch) {
-        return res
-          .status(401)
-          .json({ Message: 'Invalid Username or Password' });
-      }
-
-      return res.status(200).json({
-        Message: 'Login Successful',
-        user: { id: user.id, username: user.username },
-      });
+    console.log('Passwords match for user:', username);
+    return res.status(200).json({
+      Message: 'Login Successful',
+      user: { id: user.id, username: user.username },
     });
   });
 });

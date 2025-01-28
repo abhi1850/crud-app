@@ -1,9 +1,26 @@
-import { Avatar, Tooltip, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import Abhi from '/abhi.png';
+import { useState } from 'react';
+import { Avatar, Menu, MenuItem, Typography, Grid } from '@mui/material';
 import LOGO from '/LOGO.png';
+import Abhi from '/abhi.png';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const [anchorEl, setAnchorEl] = useState(null); // State for dropdown
+  const navigate = useNavigate();
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget); // Open dropdown menu
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null); // Close dropdown menu
+  };
+
+  const handleLogout = () => {
+    sessionStorage.clear(); // Clear session storage
+    navigate('/'); // Redirect to login page
+  };
+
   return (
     <Grid
       container
@@ -16,6 +33,7 @@ const Header = () => {
         border: '1px solid black',
       }}
     >
+      {/* Logo Section */}
       <Grid
         item
         sm={1}
@@ -40,6 +58,7 @@ const Header = () => {
         />
       </Grid>
 
+      {/* Title Section */}
       <Grid item sm={10} sx={{ display: 'flex', justifyContent: 'center' }}>
         <Typography
           sx={{
@@ -51,6 +70,8 @@ const Header = () => {
           CRUD APP
         </Typography>
       </Grid>
+
+      {/* Avatar with Dropdown */}
       <Grid
         item
         sm={1}
@@ -62,9 +83,27 @@ const Header = () => {
           pr: 3,
         }}
       >
-        <Tooltip title="Abhishek T" arrow>
-          <Avatar alt="Abhi" sx={{ border: '2px solid red' }} src={Abhi} />
-        </Tooltip>
+        <Avatar
+          alt="Abhi"
+          src={Abhi}
+          sx={{ border: '2px solid red', cursor: 'pointer' }}
+          onClick={handleMenuOpen} // Open menu on click
+        />
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        </Menu>
       </Grid>
     </Grid>
   );
