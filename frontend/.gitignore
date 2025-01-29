@@ -25,7 +25,7 @@ dist-ssr
 
 
 # Frontend (Vite)
-frontend/node_modules/
-frontend/dist/
-frontend/.env
-frontend/.env.*.local
+node_modules/
+dist/
+.env
+.env.*.local
