@@ -45,7 +45,7 @@ const View = () => {
     const item = data[index];
     try {
       await deleteItem(item.id);
-      setData(data.filter((person) => person.id !== item.id));
+      setData(data?.filter((person) => person.id !== item.id));
       console.log('Item deleted');
     } catch (err) {
       console.log('Error deleting item:', err);
@@ -57,8 +57,8 @@ const View = () => {
     datasets: [
       {
         data: [
-          data.filter((person) => person.occupation).length,
-          data.length - data.filter((person) => person.occupation).length,
+          data?.filter((person) => person.occupation).length,
+          data?.length - data?.filter((person) => person.occupation).length,
         ],
         backgroundColor: ['#36A2EB', '#FF6384'],
         hoverBackgroundColor: ['#36A2EB', '#FF6384'],
@@ -90,14 +90,14 @@ const View = () => {
           <Typography variant="h6" gutterBottom>
             Dashboard
           </Typography>
-          <Typography variant="body2">Total Records: {data.length}</Typography>
+          <Typography variant="body2">Total Records: {data?.length}</Typography>
           <Typography variant="body2">
             Occupation Count:{' '}
-            {data.filter((person) => person.occupation).length}
+            {data?.filter((person) => person.occupation).length}
           </Typography>
           <Typography variant="body2">
             No Occupation:{' '}
-            {data.length - data.filter((person) => person.occupation).length}
+            {data?.length - data?.filter((person) => person.occupation).length}
           </Typography>
           <Box
             sx={{
@@ -118,7 +118,7 @@ const View = () => {
         xs={8}
         sx={{ maxHeight: 'calc(100vh - 32px)', overflowY: 'auto' }}
       >
-        {data.map((person, index) => (
+        {data?.map((person, index) => (
           <Grid item sm={12} key={index} sx={{ mb: 3, ml: 2, mr: 2 }}>
             <Paper
               elevation={3}
