@@ -40,6 +40,8 @@ This is a full-stack CRUD (Create, Read, Update, Delete) application developed t
 
 ### Table info (Query) :
 
+- **personal_information** Table
+
 ```
     CREATE TABLE personal_information (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -52,30 +54,58 @@ This is a full-stack CRUD (Create, Read, Update, Delete) application developed t
     occupation VARCHAR(255) NOT NULL,
     website VARCHAR(255) NOT NULL
 );
+```
 
+- **users** Table
+
+```
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    isAdminUser tinyint(1) DEFAULT 0
 ```
 
 ### Folder Structure :
 
 ```
-backend
-|-server.js
-|-auth
-    |-auth.js
+crud-app
+  |-backend
+    |-server.js
+    |-auth
+      |-auth.js
+    |-package.json
+    |-package-lock.json
 
-frontend
-|-src
-   |-components
-     |-Footer.jsx
-     |-Header.jsx
-     |-Sidebar.jsx
-   |-pages
-     |-Form.jsx
-     |-View.jsx
-   |-auth
-     |-Login.jsx
-   |-store
-     |-App.js
+  |-frontend
+    |-public
+      |-LOGO.jpeg
+    |-src
+      |-components
+        |-Footer.jsx
+        |-Header.jsx
+        |-Sidebar.jsx
+      |-pages
+        |-Form.jsx
+        |-View.jsx
+      |-auth
+        |-Login.jsx
+      |-store
+        |-App.js
+      |-.gitignore
+      |-eslint.config.js
+      |-index.html
+      |-package.json
+      |-package-lock.json
+      |-vite.config.js
+
+    |-package.json
+    |-package-lock.json
+
+  |-.gitignore
+  |-.prettierrc
+  |-README.md
+
 
 ```
 
