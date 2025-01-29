@@ -1,4 +1,4 @@
 # Backend (Node.js/Express or similar)
-backend/node_modules/
-backend/.env
-backend/.env.*.local
+node_modules/
+.env
+.env.*.local

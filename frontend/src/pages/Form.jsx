@@ -1,114 +1,102 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { TextField, Grid, Button, Typography, Paper } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useFormik } from 'formik';
 import LOGO from '/LOGO.png';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getDataById, addData, updateData } from '../store/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import styles
 
 const Form = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    name: '',
-    dob: null,
-    phoneNumber: '',
-    email: '',
-    address: '',
-    qualification: '',
-    occupation: '',
-    website: '',
-  });
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      dob: null,
+      phoneNumber: '',
+      email: '',
+      address: '',
+      qualification: '',
+      occupation: '',
+      website: '',
+    },
+    validate: (values) => {
+      const errors = {};
+      const phoneRegex = /^[0-9]{10}$/;
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      const websiteRegex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
 
-  const [errors, setErrors] = useState({
-    phoneNumber: '',
-    email: '',
-    website: '',
+      if (!phoneRegex.test(values.phoneNumber)) {
+        errors.phoneNumber = 'Phone number must be 10 digits.';
+      }
+      if (!emailRegex.test(values.email)) {
+        errors.email = 'Please enter a valid email address.';
+      }
+      if (!websiteRegex.test(values.website)) {
+        errors.website = 'Please enter a valid website URL.';
+      }
+
+      return errors;
+    },
+    onSubmit: (values) => {
+      if (id) {
+        updateData(id, values)
+          .then((res) => {
+            toast.success('Data updated successfully!');
+            console.log('Update Response:', res.data);
+            navigate(`/view`);
+          })
+          .catch((err) => {
+            toast.error('Failed to update data!');
+            console.log(err);
+          });
+      } else {
+        addData(values)
+          .then((res) => {
+            toast.success('Data added successfully!');
+            console.log('Add Response:', res.data);
+            navigate(`/view`);
+          })
+          .catch((err) => {
+            toast.error('Failed to add data!');
+            console.log(err);
+          });
+      }
+    },
   });
 
   useEffect(() => {
     if (id) {
-      getDataById(id) // Using the imported API function
+      getDataById(id)
         .then((res) => {
-          setFormData({
-            name: res?.data?.response[0]?.name || '',
-            dob: new Date(res?.data?.response[0]?.dob),
-            phoneNumber: res?.data?.response[0]?.phoneNumber || '',
-            email: res?.data?.response[0]?.email || '',
-            address: res?.data?.response[0]?.address || '',
-            qualification: res?.data?.response[0]?.qualification || '',
-            occupation: res?.data?.response[0]?.occupation || '',
-            website: res?.data?.response[0]?.website || '',
-          });
+          const data = res?.data?.response;
+          if (data) {
+            formik.setValues({
+              name: data.name || '',
+              dob: new Date(data.dob),
+              phoneNumber: data.phoneNumber || '',
+              email: data.email || '',
+              address: data.address || '',
+              qualification: data.qualification || '',
+              occupation: data.occupation || '',
+              website: data.website || '',
+            });
+          }
         })
         .catch((err) => console.log(err));
     }
   }, [id]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleDateChange = (date) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      dob: date,
-    }));
-  };
-
-  const validateForm = () => {
-    let formErrors = {};
-    const phoneRegex = /^[0-9]{10}$/;
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    const websiteRegex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
-
-    if (!phoneRegex.test(formData.phoneNumber)) {
-      formErrors.phoneNumber = 'Phone number must be 10 digits.';
-    }
-    if (!emailRegex.test(formData.email)) {
-      formErrors.email = 'Please enter a valid email address.';
-    }
-    if (!websiteRegex.test(formData.website)) {
-      formErrors.website = 'Please enter a valid website URL.';
-    }
-
-    setErrors(formErrors);
-    return Object.keys(formErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      if (id) {
-        updateData(id, formData) // Using the imported API function
-          .then((res) => {
-            console.log('Update Response:', res.data);
-            navigate(`/view`);
-          })
-          .catch((err) => console.log(err));
-      } else {
-        addData(formData) // Using the imported API function
-          .then((res) => {
-            console.log('Add Response:', res.data);
-            navigate(`/view`);
-          })
-          .catch((err) => console.log(err));
-      }
-    }
-  };
-
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      console.log("Is Admin User : ",sessionStorage.getItem?.isAdminUser);
       <Paper
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={formik.handleSubmit}
         sx={{
           maxWidth: 600,
           mx: 'auto',
@@ -159,8 +147,8 @@ const Form = () => {
               label="Name"
               variant="outlined"
               name="name"
-              value={formData.name}
-              onChange={handleChange}
+              value={formik.values.name}
+              onChange={formik.handleChange}
               required
             />
           </Grid>
@@ -168,8 +156,8 @@ const Form = () => {
           <Grid item xs={12} sm={6}>
             <DatePicker
               label="Date of Birth"
-              value={formData.dob}
-              onChange={handleDateChange}
+              value={formik.values.dob}
+              onChange={(date) => formik.setFieldValue('dob', date)}
               renderInput={(params) => (
                 <TextField {...params} fullWidth required />
               )}
@@ -182,11 +170,11 @@ const Form = () => {
               label="Phone Number"
               variant="outlined"
               name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
+              value={formik.values.phoneNumber}
+              onChange={formik.handleChange}
               required
-              error={!!errors.phoneNumber}
-              helperText={errors.phoneNumber}
+              error={!!formik.errors.phoneNumber}
+              helperText={formik.errors.phoneNumber}
             />
           </Grid>
 
@@ -196,12 +184,12 @@ const Form = () => {
               label="Email"
               variant="outlined"
               name="email"
-              value={formData.email}
-              onChange={handleChange}
+              value={formik.values.email}
+              onChange={formik.handleChange}
               type="email"
               required
-              error={!!errors.email}
-              helperText={errors.email}
+              error={!!formik.errors.email}
+              helperText={formik.errors.email}
             />
           </Grid>
 
@@ -211,8 +199,8 @@ const Form = () => {
               label="Address"
               variant="outlined"
               name="address"
-              value={formData.address}
-              onChange={handleChange}
+              value={formik.values.address}
+              onChange={formik.handleChange}
               required
             />
           </Grid>
@@ -223,8 +211,8 @@ const Form = () => {
               label="Qualification"
               variant="outlined"
               name="qualification"
-              value={formData.qualification}
-              onChange={handleChange}
+              value={formik.values.qualification}
+              onChange={formik.handleChange}
               required
             />
           </Grid>
@@ -235,8 +223,8 @@ const Form = () => {
               label="Occupation"
               variant="outlined"
               name="occupation"
-              value={formData.occupation}
-              onChange={handleChange}
+              value={formik.values.occupation}
+              onChange={formik.handleChange}
             />
           </Grid>
 
@@ -246,11 +234,11 @@ const Form = () => {
               label="Website"
               variant="outlined"
               name="website"
-              value={formData.website}
-              onChange={handleChange}
+              value={formik.values.website}
+              onChange={formik.handleChange}
               required
-              error={!!errors.website}
-              helperText={errors.website}
+              error={!!formik.errors.website}
+              helperText={formik.errors.website}
             />
           </Grid>
 
@@ -261,6 +249,9 @@ const Form = () => {
           </Grid>
         </Grid>
       </Paper>
+
+      {/* Toast Container */}
+      <ToastContainer />
     </LocalizationProvider>
   );
 };
