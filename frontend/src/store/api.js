@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for the API
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'http://localhost:5000';
 
 // Get all data
 export const getAllData = async () => {
