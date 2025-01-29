@@ -46,7 +46,11 @@ router.post('/login', (req, res) => {
     console.log('Passwords match for user:', username);
     return res.status(200).json({
       Message: 'Login Successful',
-      user: { id: user.id, username: user.username },
+      user: {
+        id: user.id,
+        username: user.username,
+        isAdminUser: user.isAdminUser, // Include isAdminUser field
+      },
     });
   });
 });

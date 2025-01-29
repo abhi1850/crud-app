@@ -105,6 +105,7 @@ const Form = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
+      console.log("Is Admin User : ",sessionStorage.getItem?.isAdminUser);
       <Paper
         component="form"
         onSubmit={handleSubmit}

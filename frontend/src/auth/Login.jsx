@@ -70,12 +70,13 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const response = await signIn(values.username, values.password);
-        toast.success(response.message); // Show success message
+        toast.success(response.message);
         sessionStorage.setItem('isAuthenticated', true);
-        navigate('/form'); // Redirect to /form page
+        sessionStorage.setItem('isAdminUser', response?.user?.isAdminUser);
+        navigate('/form');
       } catch (error) {
-        toast.error(error.message || 'Login failed'); // Show error message
-        generateCaptcha(); // Refresh CAPTCHA on error
+        toast.error(error.message || 'Login failed');
+        generateCaptcha();
       }
     },
   });
@@ -88,7 +89,7 @@ const Login = () => {
   };
 
   return (
-    <Grid container style={{ height: '100vh' }}>
+    <Grid container style={{ height: '100vh', width: '100vw' }}>
       {/* Left part with an image */}
       <Grid
         item
