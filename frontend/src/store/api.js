@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for the API
-const BASE_URL = 'https://backend-fz9h.onrender.com';
+const BASE_URL = 'http://localhost:5000';
 
 // Get all data
 export const getAllData = async () => {
@@ -32,6 +32,8 @@ export const getDataById = (id) => {
 
 // API to add new data
 export const addData = (formData) => {
+  console.log('checking');
+
   return axios.post(`${BASE_URL}/personal-info`, formData);
 };
 

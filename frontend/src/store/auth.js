@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// const BASE_URL = 'https://backend-fz9h.onrender.com';
-const BASE_URL = 'http://localhost:5000'; //Test
+const BASE_URL = 'http://localhost:5000';
 
 export const signIn = async (username, password) => {
   try {
@@ -9,7 +8,7 @@ export const signIn = async (username, password) => {
       username,
       password,
     });
-    return response.data; // Assuming the API returns { message: '', success: true/false }
+    return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Something went wrong' };
   }
@@ -31,7 +30,7 @@ export const register = async (
       isAdminUser,
     });
 
-    return response.data; // Assuming the API returns { message: '', success: true/false }
+    return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Something went wrong' };
   }
