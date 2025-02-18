@@ -1,6 +1,6 @@
 # Full-Stack CRUD Application
 
-This is a full-stack CRUD (Create, Read, Update, Delete) application developed to manage personal information. The backend is connected to a MySQL database (using XAMPP), while the frontend is built using Vite and styled with Material-UI.
+This is a full-stack CRUD (Create, Read, Update, Delete) application developed to manage personal information. The backend is connected to a MongoDB cloud, while the frontend is built using Vite and styled with Material-UI.
 
 ---
 
@@ -8,7 +8,7 @@ This is a full-stack CRUD (Create, Read, Update, Delete) application developed t
 
 - **Backend**:
 
-  - Built using Node.js to interact with a MySQL database.
+  - Built using Node.js to interact with a MongoDB database.
   - Handles all CRUD operations for managing personal information.
   - API endpoints for:
     - Creating new records.
@@ -29,8 +29,7 @@ This is a full-stack CRUD (Create, Read, Update, Delete) application developed t
 ### Backend:
 
 - **Node** **&** **Express** (for server-side logic)
-- **MySQL** (database)
-- **XAMPP** (local server)
+- **MongoDB** (database)
 
 ### Frontend:
 
@@ -38,42 +37,21 @@ This is a full-stack CRUD (Create, Read, Update, Delete) application developed t
 - **Material-UI** (MUI) for styling)
 - **Axios** (for API communication)
 
-### Table info (Query) :
-
-- **personal_information** Table
-
-```
-    CREATE TABLE personal_information (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    dob DATE NOT NULL,
-    phoneNumber VARCHAR(15) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    address TEXT NOT NULL,
-    qualification VARCHAR(255) NOT NULL,
-    occupation VARCHAR(255) NOT NULL,
-    website VARCHAR(255) NOT NULL
-);
-```
-
-- **users** Table
-
-```
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    isAdminUser tinyint(1) DEFAULT 0
-```
-
 ### Folder Structure :
 
-```
+````
 crud-app
   |-backend
     |-server.js
-    |-auth
-      |-auth.js
+    |-controllers
+      |-authController.js
+      |-personalInfoController.js
+    |-models
+      |-PersonalInfo.js
+      |-User.js
+    |-routes
+      |-authRoutes.js
+      |-personalInfoRoutes.js
     |-package.json
     |-package-lock.json
 
@@ -90,8 +68,15 @@ crud-app
         |-View.jsx
       |-auth
         |-Login.jsx
+        |-Register.jsx
+        |-ProectedRoutes.jsx
       |-store
-        |-App.js
+        |-api.js
+        |-auth.js
+      |-App.css
+      |-App.jsx
+      |-index.css
+      |-main.jsx
       |-.gitignore
       |-eslint.config.js
       |-index.html
@@ -107,15 +92,11 @@ crud-app
   |-README.md
 
 
-```
-
----
-
 ## Installation
 
 ### Prerequisites:
 
-- XAMPP installed on your system.
+- MongoDB cloud cluster.
 - Node.js installed.
 - A code editor like VS Code.
 - Git (optional).
@@ -127,4 +108,4 @@ crud-app
 ```bash
 git clone https://github.com/abhi1850/crud-app.git
 cd crud-app
-```
+````
